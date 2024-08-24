@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hotel Search Results</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background-color: #97E7F5;
+            background-image: linear-gradient(135deg, #f0f2f5 25%, #ffffff 100%);
+            color: #333;
+            text-align: center;
+        }
+        .header-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            display: inline-block;
+        }
+        .search-box {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .search-box a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .search-box a:hover {
+            text-decoration: underline;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        th, td { 
+            border: none; 
+            padding: 12px; 
+            text-align: left;
+            border-bottom: 1px solid #dddddd;
+        }
+        th { 
+            background-color: #28a745; 
+            color: white;
+        }
+        tr:nth-child(even) { 
+            background-color: #f7f9fb; 
+        }
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        tr:hover {
+            background-color: #eaf3fa;
+        }
+        .strikethrough { 
+            text-decoration: line-through; 
+            color: #c0392b; 
+        }
+        .best-deal-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        .best-deal-box {
+            background-color: #fefefe;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            width: 300px;
+            text-align: left;
+            border-radius: 10px;
+            animation: shine 2s infinite;
+            background-image: linear-gradient(135deg, #fefefe 25%, #f3f4f7 50%, #fefefe 75%);
+            background-size: 400% 400%;
+        }
+        .best-deal-box:before {
+            content: 'Best Deal';
+            background-color: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 14px;
+            position: absolute;
+            top: -20px;
+            left: -5px;
+            transform: rotate(-5deg);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .best-deal-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        .best-deal-price .strikethrough {
+            color: #c0392b;
+        }
+        img {
+            display: block;
+            margin: 30px auto;
+            max-height: 500px;
+            width: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        @keyframes shine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1><strong>Hotels Details</strong></h1>
+        <div class="search-box">
+            <a href="/">Search Another City</a>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <th>Hotel Names</th>
+            <th>Original Price</th>
+            <th>Discounted Price</th>
+            <th>Rating</th>
+            <th>Platform</th>
+        </tr>
+        {% for entry in sorted_data %}
+        <tr>
+            <td>{{ entry['Hotel Name'] }}</td>
+            <td class="strikethrough">₹ {{ entry['Original Price'] }}</td>
+            <td>₹ {{ entry['Price'] }}</td>
+            <td>{{ entry['Rating'] }}</td>
+            <td>{{ entry['Platform'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    {% if best_deal %}
+    <div class="best-deal-container">
+        <div class="best-deal-box">
+            <h2>Best Deal</h2>
+            <p>Hotel Name: {{ best_deal['Hotel Name'] }}</p>
+            <p>Original Price: <span class="strikethrough">₹ {{ best_deal['Original Price'] }}</span></p>
+            <p class="best-deal-price">Discounted Price: ₹ {{ best_deal['Price'] }}</p>
+            <p>Rating: {{ best_deal['Rating'] }}</p>
+            <p>Platform: {{ best_deal['Platform'] }}</p>
+        </div>
+    </div>
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
+    
+    <img src="{{ url_for('plot') }}" alt="Price Comparison Bar Graph">
+</body>
+</html>
